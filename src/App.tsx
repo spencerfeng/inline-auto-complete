@@ -1,6 +1,7 @@
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
+import InlineAutoCompleteWrapper from './components/InlineAutoCompleteWrapper'
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <InlineAutoCompleteWrapper>
+        <textarea />
+      </InlineAutoCompleteWrapper>
     </div>
   )
 }
