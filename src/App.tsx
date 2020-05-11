@@ -3,6 +3,16 @@ import logo from './logo.svg'
 import './App.css'
 import InlineAutoCompleteWrapper from './components/InlineAutoCompleteWrapper'
 
+const styles = {
+  input: {
+    padding: 5,
+    lineHeight: 1.4,
+    width: 200,
+    height: 100,
+    border: '1px solid #cccccc'
+  }
+}
+
 function App() {
   return (
     <div className="App">
@@ -16,7 +26,7 @@ function App() {
         </a>
       </header>
       <InlineAutoCompleteWrapper>
-        <textarea />
+        <textarea style={styles.input} />
       </InlineAutoCompleteWrapper>
     </div>
   )
