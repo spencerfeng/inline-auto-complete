@@ -2,8 +2,16 @@ import React, { useRef, useEffect, useState } from 'react'
 import ShadowInput, { ShadowInputRef } from './ShadowInput'
 import Suggestions from './Suggestions'
 
+const escapeRegex = (str: string): string => str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+
+const getTriggerRegex = (trigger: string): RegExp => {
+  const escapedTriggerChar = escapeRegex(trigger)
+  return new RegExp(`(?:^|\\s)(${escapedTriggerChar}([^${escapedTriggerChar}\\s]*))$`)
+}
+
 interface CompProps {
   children: JSX.Element // we only allow a single JSX element as the children
+  trigger: string
 }
 
 // reference: how to fix this issue: Type 'string' is not assignable to type '“inherit” | “initial” | “unset” | “fixed” | “absolute” | “static” | “relative” | “sticky”
