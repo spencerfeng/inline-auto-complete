@@ -24,6 +24,7 @@ const styles = {
 }
 
 const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
+  const triggerRegex = getTriggerRegex(props.trigger)
   const [text, setText] = useState('')
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

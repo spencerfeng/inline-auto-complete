@@ -25,7 +25,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <InlineAutoCompleteWrapper>
+      <InlineAutoCompleteWrapper trigger="@">
         <textarea style={styles.input} />
       </InlineAutoCompleteWrapper>
     </div>
