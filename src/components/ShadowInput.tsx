@@ -7,6 +7,7 @@ export interface ShadowInputRef {
 
 interface Props {
   text: string
+  positionIndex: number | null
 }
 
 const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) => {
@@ -22,9 +23,36 @@ const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) 
     }
   }))
 
+  const textBeforePositionIndicator = (): string => {
+    if (props.positionIndex !== null) {
+      return props.text.substring(0, props.positionIndex)
+    }
+    return ''
+  }
+
+  const textForPositionIndicator = (): string => {
+    if (props.positionIndex !== null) {
+      return props.text.substring(props.positionIndex, props.positionIndex + 1)
+    }
+    return ''
+  }
+
+  const textAfterPositionIndicator = (): string => {
+    if (props.positionIndex !== null) {
+      return props.text.substring(props.positionIndex + 1)
+    }
+    return ''
+  }
+
+  if (props.positionIndex === null) {
+    return <div ref={divRef}>{props.text}</div>
+  }
+
   return (
     <div ref={divRef}>
-      <span ref={caratRef}>{props.text}</span>
+      {textBeforePositionIndicator()}
+      <span ref={caratRef}>{textForPositionIndicator()}</span>
+      {textAfterPositionIndicator()}
     </div>
   )
 })

@@ -26,6 +26,8 @@ const styles = {
 const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const triggerRegex = getTriggerRegex(props.trigger)
   const [text, setText] = useState('')
+  const [caretStart, setCaretStart] = useState<number | null>(null)
+  const [caretEnd, setCaretEnd] = useState<number | null>(null)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const inputEl = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
@@ -61,12 +63,20 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     if (shadowInputRef.current && shadowInputRef.current.caret) {
       console.log('shadowInputRef.current.caret', shadowInputRef.current.caret)
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const match = triggerRegex.exec(e.currentTarget.value)
+    if (match) {
+      console.log('match', match)
+      setCaretStart(match.index)
+      setCaretEnd(match.index + match[1].length)
+    }
   }
 
   return (
     <div style={styles.wrapper}>
       <props.children.type {...props.children.props} ref={inputEl} onChange={handleOnChange} />
-      <ShadowInput ref={shadowInputRef} text={text} />
+      <ShadowInput ref={shadowInputRef} text={text} positionIndex={caretStart} />
       <Suggestions ref={suggestionsRef} text={text} />
     </div>
   )
