@@ -30,6 +30,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const [caretEnd, setCaretEnd] = useState<number | null>(null)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const inputEl = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const shadowInputRef = useRef<ShadowInputRef>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
@@ -44,8 +45,33 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       shadowInputRef.current!.wrapper!.style.cssText += inputStyle.cssText
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       shadowInputRef.current!.wrapper!.style.position = 'absolute'
-      // shadowInputRef.current.style.top = '0px'
-      // shadowInputRef.current.style.left = '0px'
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      shadowInputRef.current!.wrapper!.style.top = '0px'
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      shadowInputRef.current!.wrapper!.style.left = '0px'
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      shadowInputRef.current!.wrapper!.style.zIndex = '-1'
+    }
+
+    if (
+      suggestionsRef &&
+      suggestionsRef.current &&
+      shadowInputRef &&
+      shadowInputRef.current &&
+      wrapperRef &&
+      wrapperRef.current
+    ) {
+      if (caretStart !== null && caretEnd !== null) {
+        const wrapperRect = wrapperRef.current.getBoundingClientRect()
+        const caretRect = shadowInputRef.current.caret?.getBoundingClientRect()
+        if (wrapperRect && caretRect) {
+          const topDiff = caretRect.top - wrapperRect.top
+          const leftDiff = caretRect.left - wrapperRect.left
+
+          suggestionsRef.current.style.top = `${topDiff + caretRect.height + 2}px`
+          suggestionsRef.current.style.left = `${leftDiff}px`
+        }
+      }
     }
   })
 
@@ -70,14 +96,17 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       console.log('match', match)
       setCaretStart(match.index)
       setCaretEnd(match.index + match[1].length)
+    } else {
+      setCaretStart(null)
+      setCaretEnd(null)
     }
   }
 
   return (
-    <div style={styles.wrapper}>
+    <div style={styles.wrapper} ref={wrapperRef}>
       <props.children.type {...props.children.props} ref={inputEl} onChange={handleOnChange} />
       <ShadowInput ref={shadowInputRef} text={text} positionIndex={caretStart} />
-      <Suggestions ref={suggestionsRef} text={text} />
+      {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} text={text} />}
     </div>
   )
 }

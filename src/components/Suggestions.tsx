@@ -9,8 +9,9 @@ type Ref = HTMLDivElement
 const styles = {
   wrapper: {
     width: 100,
-    border: '1px solid #cccccc'
-  },
+    border: '1px solid #cccccc',
+    position: 'absolute'
+  } as React.CSSProperties,
   list: {
     listStyle: 'none',
     margin: 0,
