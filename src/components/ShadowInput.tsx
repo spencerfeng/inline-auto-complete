@@ -7,12 +7,14 @@ export interface ShadowInputRef {
 
 interface Props {
   text: string
-  positionIndex: number | null
+  caretStart: number | null
+  caretEnd: number | null
 }
 
 const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) => {
   const divRef = useRef<HTMLDivElement>(null)
   const caratRef = useRef<HTMLSpanElement>(null)
+  const { caretStart, caretEnd, text } = props
 
   useImperativeHandle(ref, () => ({
     get wrapper(): HTMLDivElement | null {
@@ -24,37 +26,37 @@ const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) 
   }))
 
   const textBeforePositionIndicator = (): string => {
-    if (props.positionIndex !== null) {
-      return props.text.substring(0, props.positionIndex)
+    if (caretStart !== null) {
+      return text.substring(0, caretStart)
     }
     return ''
   }
 
   const textForPositionIndicator = (): string => {
-    if (props.positionIndex !== null) {
-      return props.text.substring(props.positionIndex, props.positionIndex + 1)
+    if (caretStart !== null && caretEnd !== null) {
+      return text.substring(caretStart, caretEnd + 1)
     }
     return ''
   }
 
   const textAfterPositionIndicator = (): string => {
-    if (props.positionIndex !== null) {
-      return props.text.substring(props.positionIndex + 1)
+    if (caretEnd !== null) {
+      return text.substring(caretEnd + 1)
     }
     return ''
   }
 
-  if (props.positionIndex === null) {
-    return <div ref={divRef}>{props.text}</div>
+  if (caretStart !== null && caretEnd !== null) {
+    return (
+      <div ref={divRef}>
+        {textBeforePositionIndicator()}
+        <span ref={caratRef}>{textForPositionIndicator()}</span>
+        {textAfterPositionIndicator()}
+      </div>
+    )
   }
 
-  return (
-    <div ref={divRef}>
-      {textBeforePositionIndicator()}
-      <span ref={caratRef}>{textForPositionIndicator()}</span>
-      {textAfterPositionIndicator()}
-    </div>
-  )
+  return <div ref={divRef}>{text}</div>
 })
 
 ShadowInput.displayName = 'ShadowInput'

@@ -101,7 +101,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   return (
     <div style={styles.wrapper} ref={wrapperRef}>
       <props.children.type {...props.children.props} ref={inputEl} onChange={handleOnChange} />
-      <ShadowInput ref={shadowInputRef} text={text} positionIndex={caretStart} />
+      <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
       {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} text={text} />}
     </div>
   )
