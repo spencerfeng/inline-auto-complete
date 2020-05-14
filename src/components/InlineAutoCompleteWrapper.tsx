@@ -86,10 +86,6 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       shadowInputRef.current!.wrapper!.scrollTop = inputScrollTop
     }
 
-    if (shadowInputRef.current && shadowInputRef.current.caret) {
-      console.log('shadowInputRef.current.caret', shadowInputRef.current.caret)
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const match = triggerRegex.exec(e.currentTarget.value)
     if (match) {
