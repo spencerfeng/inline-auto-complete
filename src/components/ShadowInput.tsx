@@ -13,7 +13,7 @@ interface Props {
 
 const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) => {
   const divRef = useRef<HTMLDivElement>(null)
-  const caratRef = useRef<HTMLSpanElement>(null)
+  const caretRef = useRef<HTMLSpanElement>(null)
   const { caretStart, caretEnd, text } = props
 
   useImperativeHandle(ref, () => ({
@@ -21,7 +21,7 @@ const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) 
       return divRef.current
     },
     get caret(): HTMLSpanElement | null {
-      return caratRef.current
+      return caretRef.current
     }
   }))
 
@@ -50,7 +50,7 @@ const ShadowInput = React.forwardRef<ShadowInputRef, Props>((props: Props, ref) 
     return (
       <div ref={divRef}>
         {textBeforePositionIndicator()}
-        <span ref={caratRef}>{textForPositionIndicator()}</span>
+        <span ref={caretRef}>{textForPositionIndicator()}</span>
         {textAfterPositionIndicator()}
       </div>
     )
