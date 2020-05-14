@@ -31,16 +31,16 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const inputEl = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const shadowInputRef = useRef<ShadowInputRef>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const isInputElAvailable = inputEl && inputEl.current
+    const isinputRefAvailable = inputRef && inputRef.current
     const isShadowInputWrapperAvailable = shadowInputRef && shadowInputRef.current && shadowInputRef.current.wrapper
-    if (isInputElAvailable && isShadowInputWrapperAvailable) {
+    if (isinputRefAvailable && isShadowInputWrapperAvailable) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const inputStyle = getComputedStyle(inputEl.current!)
+      const inputStyle = getComputedStyle(inputRef.current!)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       shadowInputRef.current!.wrapper!.style.cssText += inputStyle.cssText
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -78,7 +78,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const handleOnChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setText(e.currentTarget.value)
 
-    const inputScrollTop = inputEl.current?.scrollTop
+    const inputScrollTop = inputRef.current?.scrollTop
     const isShadowInputWrapperAvailable = shadowInputRef.current && shadowInputRef.current.wrapper
 
     if (inputScrollTop && isShadowInputWrapperAvailable) {
@@ -100,7 +100,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
 
   return (
     <div style={styles.wrapper} ref={wrapperRef}>
-      <props.children.type {...props.children.props} ref={inputEl} onChange={handleOnChange} />
+      <props.children.type {...props.children.props} ref={inputRef} onChange={handleOnChange} />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
       {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} text={text} />}
     </div>
