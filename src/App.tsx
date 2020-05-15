@@ -25,7 +25,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <InlineAutoCompleteWrapper trigger="@">
+      <InlineAutoCompleteWrapper trigger="@" suggestions={['Item 1', 'Item 2', 'Item 3', 'Item 4']}>
         <textarea style={styles.input} />
       </InlineAutoCompleteWrapper>
     </div>

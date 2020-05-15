@@ -12,6 +12,7 @@ const getTriggerRegex = (trigger: string): RegExp => {
 interface CompProps {
   children: JSX.Element // we only allow a single JSX element as the children
   trigger: string
+  suggestions: string[]
 }
 
 // reference: how to fix this issue: Type 'string' is not assignable to type '“inherit” | “initial” | “unset” | “fixed” | “absolute” | “static” | “relative” | “sticky”
@@ -109,7 +110,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     <div style={styles.wrapper} ref={wrapperRef}>
       <props.children.type {...props.children.props} ref={inputRef} onChange={handleOnChange} />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
-      {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} text={text} />}
+      {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} suggestions={props.suggestions} />}
     </div>
   )
 }

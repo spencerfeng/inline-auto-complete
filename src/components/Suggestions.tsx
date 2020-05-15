@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Props {
-  text: string
+  suggestions: string[]
 }
 
 type Ref = HTMLDivElement
@@ -27,10 +27,11 @@ const Suggestions = React.forwardRef<Ref, Props>((props: Props, ref) => {
   return (
     <div ref={ref} style={styles.wrapper}>
       <ul style={styles.list}>
-        <li style={styles.listItem}>Item 1</li>
-        <li style={styles.listItem}>Item 2</li>
-        <li style={styles.listItem}>Item 3</li>
-        <li style={styles.listItem}>Item 4</li>
+        {props.suggestions.map((suggestion) => (
+          <li style={styles.listItem} key={suggestion}>
+            {suggestion}
+          </li>
+        ))}
       </ul>
     </div>
   )
