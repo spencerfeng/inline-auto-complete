@@ -58,18 +58,25 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       suggestionsRef.current &&
       shadowInputRef &&
       shadowInputRef.current &&
+      shadowInputRef.current.wrapper &&
       wrapperRef &&
       wrapperRef.current
     ) {
       if (caretStart !== null && caretEnd !== null) {
+        console.log('shadowInputRef.current.wrapper.style.lineHeight', shadowInputRef.current.wrapper.style.lineHeight)
+
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
         const caretRect = shadowInputRef.current.caret?.getBoundingClientRect()
         if (wrapperRect && caretRect) {
           const topDiff = caretRect.top - wrapperRect.top
           const leftDiff = caretRect.left - wrapperRect.left
 
-          suggestionsRef.current.style.top = `${topDiff + caretRect.height + 2}px`
-          suggestionsRef.current.style.left = `${leftDiff}px`
+          const lineHeightVal = parseFloat(shadowInputRef.current.wrapper.style.lineHeight)
+
+          if (!isNaN(lineHeightVal)) {
+            suggestionsRef.current.style.top = `${topDiff + lineHeightVal}px`
+            suggestionsRef.current.style.left = `${leftDiff}px`
+          }
         }
       }
     }
@@ -90,7 +97,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     const match = triggerRegex.exec(e.currentTarget.value)
     if (match) {
       console.log('match', match)
-      setCaretStart(match.index)
+      setCaretStart(match.index + 1)
       setCaretEnd(match.index + match[1].length)
     } else {
       setCaretStart(null)
