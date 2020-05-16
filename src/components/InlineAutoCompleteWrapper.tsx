@@ -36,6 +36,8 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const shadowInputRef = useRef<ShadowInputRef>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
 
+  const shouldShowSuggestions = (): boolean => caretStart !== null && caretEnd !== null
+
   useEffect(() => {
     const isinputRefAvailable = inputRef && inputRef.current
     const isShadowInputWrapperAvailable = shadowInputRef && shadowInputRef.current && shadowInputRef.current.wrapper
@@ -63,7 +65,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       wrapperRef &&
       wrapperRef.current
     ) {
-      if (caretStart !== null && caretEnd !== null) {
+      if (shouldShowSuggestions()) {
         console.log('shadowInputRef.current.wrapper.style.lineHeight', shadowInputRef.current.wrapper.style.lineHeight)
 
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
@@ -110,7 +112,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     <div style={styles.wrapper} ref={wrapperRef}>
       <props.children.type {...props.children.props} ref={inputRef} onChange={handleOnChange} />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
-      {!!caretStart && !!caretEnd && <Suggestions ref={suggestionsRef} suggestions={props.suggestions} />}
+      {shouldShowSuggestions() && <Suggestions ref={suggestionsRef} suggestions={props.suggestions} />}
     </div>
   )
 }
