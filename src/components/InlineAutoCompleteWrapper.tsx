@@ -66,8 +66,6 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       wrapperRef.current
     ) {
       if (shouldShowSuggestions()) {
-        console.log('shadowInputRef.current.wrapper.style.lineHeight', shadowInputRef.current.wrapper.style.lineHeight)
-
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
         const caretRect = shadowInputRef.current.caret?.getBoundingClientRect()
         if (wrapperRect && caretRect) {
