@@ -9,6 +9,14 @@ const getTriggerRegex = (trigger: string): RegExp => {
   return new RegExp(`(?:^|\\s)(${escapedTriggerChar}([^${escapedTriggerChar}\\s]*))$`)
 }
 
+const KEYS = {
+  TAB: 9,
+  RETURN: 13,
+  ESC: 27,
+  UP: 38,
+  DOWN: 40
+}
+
 interface CompProps {
   children: JSX.Element // we only allow a single JSX element as the children
   trigger: string
@@ -97,8 +105,25 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     }
   }
 
+  const handleOnKeyDown = (e: React.KeyboardEvent): void => {
+    // do not intercept key events if the suggestions overlay is not shown
+    if (!suggestionsRef) return
+
+    if (Object.values(KEYS).includes(e.keyCode)) e.preventDefault()
+    switch (e.keyCode) {
+      // when 'ESC' is clicked, we hide the suggestions overlay
+      case KEYS.ESC: {
+        setCaretStart(null)
+        setCaretEnd(null)
+        return
+      }
+      default:
+        return
+    }
+  }
+
   return (
-    <div style={styles.wrapper} ref={wrapperRef}>
+    <div style={styles.wrapper} ref={wrapperRef} onKeyDown={handleOnKeyDown}>
       <props.children.type
         {...props.children.props}
         ref={inputRef}
