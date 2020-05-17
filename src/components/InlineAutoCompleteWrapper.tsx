@@ -83,6 +83,17 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     }
   })
 
+  const setCaret = (text: string): void => {
+    const match = triggerRegex.exec(text)
+    if (match) {
+      setCaretStart(match.index + 1)
+      setCaretEnd(match.index + match[1].length)
+    } else {
+      setCaretStart(null)
+      setCaretEnd(null)
+    }
+  }
+
   const handleOnChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setText(e.currentTarget.value)
 
@@ -94,30 +105,14 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       shadowInputRef.current!.wrapper!.scrollTop = inputScrollTop
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const match = triggerRegex.exec(e.currentTarget.value)
-    if (match) {
-      console.log('match', match)
-      setCaretStart(match.index + 1)
-      setCaretEnd(match.index + match[1].length)
-    } else {
-      setCaretStart(null)
-      setCaretEnd(null)
-    }
+    setCaret(e.currentTarget.value)
   }
 
   const handleOnSelect = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     if (inputRef?.current) {
       const selectionStart = inputRef.current.selectionStart
       if (selectionStart) {
-        const match = triggerRegex.exec(e.currentTarget.value.substring(0, selectionStart))
-        if (match) {
-          setCaretStart(match.index + 1)
-          setCaretEnd(match.index + match[1].length)
-        } else {
-          setCaretStart(null)
-          setCaretEnd(null)
-        }
+        setCaret(e.currentTarget.value.substring(0, selectionStart))
       }
     }
   }
