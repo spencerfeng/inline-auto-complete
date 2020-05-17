@@ -106,9 +106,30 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     }
   }
 
+  const handleOnSelect = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    if (inputRef?.current) {
+      const selectionStart = inputRef.current.selectionStart
+      if (selectionStart) {
+        const match = triggerRegex.exec(e.currentTarget.value.substring(0, selectionStart))
+        if (match) {
+          setCaretStart(match.index + 1)
+          setCaretEnd(match.index + match[1].length)
+        } else {
+          setCaretStart(null)
+          setCaretEnd(null)
+        }
+      }
+    }
+  }
+
   return (
     <div style={styles.wrapper} ref={wrapperRef}>
-      <props.children.type {...props.children.props} ref={inputRef} onChange={handleOnChange} />
+      <props.children.type
+        {...props.children.props}
+        ref={inputRef}
+        onChange={handleOnChange}
+        onSelect={handleOnSelect}
+      />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
       {shouldShowSuggestions() && <Suggestions ref={suggestionsRef} suggestions={props.suggestions} />}
     </div>
