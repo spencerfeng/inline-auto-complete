@@ -39,32 +39,16 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const shouldShowSuggestions = (): boolean => caretStart !== null && caretEnd !== null
 
   useEffect(() => {
-    const isinputRefAvailable = inputRef && inputRef.current
-    const isShadowInputWrapperAvailable = shadowInputRef && shadowInputRef.current && shadowInputRef.current.wrapper
-    if (isinputRefAvailable && isShadowInputWrapperAvailable) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const inputStyle = getComputedStyle(inputRef.current!)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.style.cssText += inputStyle.cssText
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.style.position = 'absolute'
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.style.top = '0px'
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.style.left = '0px'
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.style.zIndex = '-1'
+    if (inputRef?.current && shadowInputRef?.current?.wrapper) {
+      const inputStyle = getComputedStyle(inputRef.current)
+      shadowInputRef.current.wrapper.style.cssText += inputStyle.cssText
+      shadowInputRef.current.wrapper.style.position = 'absolute'
+      shadowInputRef.current.wrapper.style.top = '0px'
+      shadowInputRef.current.wrapper.style.left = '0px'
+      shadowInputRef.current.wrapper.style.zIndex = '-1'
     }
 
-    if (
-      suggestionsRef &&
-      suggestionsRef.current &&
-      shadowInputRef &&
-      shadowInputRef.current &&
-      shadowInputRef.current.wrapper &&
-      wrapperRef &&
-      wrapperRef.current
-    ) {
+    if (suggestionsRef?.current && shadowInputRef?.current?.wrapper && wrapperRef?.current) {
       if (shouldShowSuggestions()) {
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
         const caretRect = shadowInputRef.current.caret?.getBoundingClientRect()
@@ -97,12 +81,8 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const handleOnChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setText(e.currentTarget.value)
 
-    const inputScrollTop = inputRef.current?.scrollTop
-    const isShadowInputWrapperAvailable = shadowInputRef.current && shadowInputRef.current.wrapper
-
-    if (inputScrollTop && isShadowInputWrapperAvailable) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      shadowInputRef.current!.wrapper!.scrollTop = inputScrollTop
+    if (inputRef?.current?.scrollTop && shadowInputRef?.current?.wrapper) {
+      shadowInputRef.current.wrapper.scrollTop = inputRef.current.scrollTop
     }
 
     setCaret(e.currentTarget.value)
