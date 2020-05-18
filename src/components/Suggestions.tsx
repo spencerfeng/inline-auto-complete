@@ -2,6 +2,7 @@ import React from 'react'
 
 interface Props {
   suggestions: string[]
+  focusedSuggestionIndex: number | null
 }
 
 type Ref = HTMLDivElement
@@ -20,6 +21,9 @@ const styles = {
   } as React.CSSProperties,
   listItem: {
     padding: '5px 15px'
+  },
+  listItemFocused: {
+    backgroundColor: '#cccccc'
   }
 }
 
@@ -27,11 +31,16 @@ const Suggestions = React.forwardRef<Ref, Props>((props: Props, ref) => {
   return (
     <div ref={ref} style={styles.wrapper}>
       <ul style={styles.list}>
-        {props.suggestions.map((suggestion) => (
-          <li style={styles.listItem} key={suggestion}>
-            {suggestion}
-          </li>
-        ))}
+        {props.suggestions.map((suggestion, index) => {
+          const listItemStyles =
+            index === props.focusedSuggestionIndex ? { ...styles.listItem, ...styles.listItemFocused } : styles.listItem
+
+          return (
+            <li style={listItemStyles} key={suggestion}>
+              {suggestion}
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

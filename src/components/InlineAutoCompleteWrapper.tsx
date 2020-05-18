@@ -37,6 +37,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const [text, setText] = useState('')
   const [caretStart, setCaretStart] = useState<number | null>(null)
   const [caretEnd, setCaretEnd] = useState<number | null>(null)
+  const [focusedSuggestionIndex, setFocusedSuggestionIndex] = useState<number | null>(null)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -105,6 +106,16 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     }
   }
 
+  const shiftFocus = (delta: number): void => {
+    const suggestionsCount = props.suggestions.length
+    const newIndex =
+      focusedSuggestionIndex === null
+        ? (suggestionsCount - 1 + delta) % suggestionsCount
+        : (suggestionsCount + focusedSuggestionIndex + delta) % suggestionsCount
+
+    setFocusedSuggestionIndex(newIndex)
+  }
+
   const handleOnKeyDown = (e: React.KeyboardEvent): void => {
     // do not intercept key events if the suggestions overlay is not shown
     if (!suggestionsRef) return
@@ -115,6 +126,10 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       case KEYS.ESC: {
         setCaretStart(null)
         setCaretEnd(null)
+        return
+      }
+      case KEYS.DOWN: {
+        shiftFocus(+1)
         return
       }
       default:
@@ -131,7 +146,13 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
         onSelect={handleOnSelect}
       />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
-      {shouldShowSuggestions() && <Suggestions ref={suggestionsRef} suggestions={props.suggestions} />}
+      {shouldShowSuggestions() && (
+        <Suggestions
+          ref={suggestionsRef}
+          suggestions={props.suggestions}
+          focusedSuggestionIndex={focusedSuggestionIndex}
+        />
+      )}
     </div>
   )
 }
