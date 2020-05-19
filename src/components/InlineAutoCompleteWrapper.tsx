@@ -154,6 +154,10 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
         shiftFocus(+1)
         return
       }
+      case KEYS.UP: {
+        shiftFocus(-1)
+        return
+      }
       default:
         return
     }
