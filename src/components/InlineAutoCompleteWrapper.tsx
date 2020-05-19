@@ -47,6 +47,28 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
 
   const shouldShowSuggestions = (): boolean => caretStart !== null && caretEnd !== null
 
+  const handleClick = (e: MouseEvent): void => {
+    if (!suggestionsRef) return
+    if (!suggestionsRef.current) return
+    if (suggestionsRef.current.contains(e.target as Node)) {
+      return
+    }
+
+    setCaretStart(null)
+    setCaretEnd(null)
+  }
+
+  // register and unregister a handler to handle mousedown event to deal with the need to dismiss suggestions
+  // overlay when the user clicks outside the overlay
+  // reference: https://medium.com/@pitipatdop/little-neat-trick-to-capture-click-outside-with-react-hook-ba77c37c7e82
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClick)
+
+    return (): void => {
+      document.removeEventListener('mousedown', handleClick)
+    }
+  }, [])
+
   useEffect(() => {
     if (inputRef?.current && shadowInputRef?.current?.wrapper) {
       const inputStyle = getComputedStyle(inputRef.current)
