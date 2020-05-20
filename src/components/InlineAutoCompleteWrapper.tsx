@@ -138,6 +138,18 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     setFocusedSuggestionIndex(newIndex)
   }
 
+  const selectFocusedItem = (): void => {
+    if (focusedSuggestionIndex === null || caretStart === null || caretEnd === null) return
+    const focusedText = props.suggestions[focusedSuggestionIndex]
+
+    const replacedText = `${text.substring(0, caretStart)}${focusedText}${text.substring(caretEnd + 1)}`
+    setText(replacedText)
+
+    // dismiss the suggestions overlay
+    setCaretStart(null)
+    setCaretEnd(null)
+  }
+
   const handleOnKeyDown = (e: React.KeyboardEvent): void => {
     // do not intercept key events if the suggestions overlay is not shown
     if (!suggestionsRef) return
@@ -158,6 +170,10 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
         shiftFocus(-1)
         return
       }
+      case KEYS.RETURN: {
+        selectFocusedItem()
+        return
+      }
       default:
         return
     }
@@ -170,6 +186,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
         ref={inputRef}
         onChange={handleOnChange}
         onSelect={handleOnSelect}
+        value={text}
       />
       <ShadowInput ref={shadowInputRef} text={text} caretStart={caretStart} caretEnd={caretEnd} />
       {shouldShowSuggestions() && (
