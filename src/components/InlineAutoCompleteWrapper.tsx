@@ -142,14 +142,13 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     if (focusedSuggestionIndex === null || caretStart === null || caretEnd === null) return
     const focusedText = props.suggestions[focusedSuggestionIndex]
 
-    let replacedText = ''
+    let textBeforeTextToReplace = ''
     if (caretStart > 1) {
-      replacedText = `${text.substring(0, caretStart)}${focusedText}${text.substring(caretEnd + 1)}`
-    } else {
-      replacedText = `${text.substring(0, caretStart - 1)}${focusedText}${text.substring(caretEnd + 1)}`
+      textBeforeTextToReplace = `${text.substring(0, caretStart)}`
     }
+    const textAfterTextToReplace = `${text.substring(caretEnd + 1)}`
 
-    setText(replacedText)
+    setText(`${textBeforeTextToReplace}${focusedText}${textAfterTextToReplace}`)
 
     // dismiss the suggestions overlay
     setCaretStart(null)
