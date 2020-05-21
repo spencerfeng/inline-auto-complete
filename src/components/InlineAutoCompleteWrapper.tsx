@@ -38,6 +38,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
   const [caretStart, setCaretStart] = useState<number | null>(null)
   const [caretEnd, setCaretEnd] = useState<number | null>(null)
   const [focusedSuggestionIndex, setFocusedSuggestionIndex] = useState<number | null>(null)
+  const [cursorIndex, setCursorIndex] = useState<number | null>(null)
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -98,6 +99,13 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
     }
   })
 
+  useEffect(() => {
+    if (cursorIndex !== null && inputRef?.current) {
+      inputRef.current.setSelectionRange(cursorIndex, cursorIndex)
+      setCursorIndex(null)
+    }
+  }, [text])
+
   const setCaret = (text: string): void => {
     const match = triggerRegex.exec(text)
     if (match) {
@@ -147,6 +155,8 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       textBeforeTextToReplace = `${text.substring(0, caretStart)}`
     }
     const textAfterTextToReplace = `${text.substring(caretEnd + 1)}`
+
+    setCursorIndex(`${textBeforeTextToReplace}${focusedText}`.length)
 
     setText(`${textBeforeTextToReplace}${focusedText}${textAfterTextToReplace}`)
 
