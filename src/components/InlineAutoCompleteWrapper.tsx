@@ -88,12 +88,12 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
           const topDiff = caretRect.top - wrapperRect.top
           const leftDiff = caretRect.left - wrapperRect.left
 
-          const lineHeightVal = parseFloat(shadowInputRef.current.wrapper.style.lineHeight)
+          const lineHeightVal =
+            parseFloat(shadowInputRef.current.wrapper.style.lineHeight) ||
+            parseFloat(shadowInputRef.current.wrapper.style.fontSize) * 1.2
 
-          if (!isNaN(lineHeightVal)) {
-            suggestionsRef.current.style.top = `${topDiff + lineHeightVal}px`
-            suggestionsRef.current.style.left = `${leftDiff}px`
-          }
+          suggestionsRef.current.style.top = `${topDiff + lineHeightVal}px`
+          suggestionsRef.current.style.left = `${leftDiff}px`
         }
       }
     }
