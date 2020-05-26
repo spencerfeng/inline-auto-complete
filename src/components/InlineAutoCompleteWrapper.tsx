@@ -104,7 +104,7 @@ const InlineAutoCompleteWrapper: React.FC<CompProps> = (props: CompProps) => {
       inputRef.current.setSelectionRange(cursorIndex, cursorIndex)
       setCursorIndex(null)
     }
-  }, [text])
+  }, [cursorIndex])
 
   const setCaret = (text: string): void => {
     const match = triggerRegex.exec(text)
